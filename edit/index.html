@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Hub Editor — Управление контентом</title>
+  <link rel="icon" href="../assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <div class="sidebar__header">
+        <div class="sidebar__logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="6" width="20" height="12" rx="4"></rect>
+            <path d="M6 12h4m-2-2v4m7-2h.01m3 0h.01"></path>
+          </svg>
+        </div>
+        <div class="sidebar__brand">
+          <span class="brand-title">Game Hub</span>
+          <span class="brand-sub">Управление сайтом</span>
+        </div>
+      </div>
+
+      <div class="sidebar__management">
+        <label class="management-label">Management</label>
+        <div class="branch-selector">
+          <svg class="branch-icon" viewBox="0 0 16 16" fill="currentColor">
+            <path fill-rule="evenodd" d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25zM4.25 12a.75.75 0 100 1.5.75.75 0 000-1.5zM3.5 3.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"/>
+          </svg>
+          <select id="branchSelect" class="branch-select">
+            <option value="main" selected>main</option>
+          </select>
+          <button type="button" class="btn-more" id="openSettingsBtn" title="Настройки GitHub API">•••</button>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <div class="nav-heading">PAGES & SECTIONS</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item is-active" data-section="hero">
+              <span class="nav-icon">🏠</span>
+              <span>Главная (Hero & Видео)</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-section="prices">
+              <span class="nav-icon">💰</span>
+              <span>Цены и тарифы</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-section="zones">
+              <span class="nav-icon">🎮</span>
+              <span>Игровые зоны (6 зон)</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-section="parties">
+              <span class="nav-icon">🎂</span>
+              <span>Праздники и Дни рождения</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-section="night">
+              <span class="nav-icon">🌙</span>
+              <span>Ночные игры</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-section="contacts">
+              <span class="nav-icon">📞</span>
+              <span>Контакты и режим</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- User Profile Footer -->
+    <div class="sidebar__user" id="userProfile">
+      <div class="user-avatar" id="userAvatar">J</div>
+      <div class="user-meta">
+        <div class="user-name" id="userName">Josephs28</div>
+        <div class="user-status" id="userStatus">GitHub Connected</div>
+      </div>
+      <button class="btn-config" id="configureBtn" title="Настройки токена">⚙️</button>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN CONTENT AREA ===================== -->
+  <main class="main-panel">
+    <!-- Top Action Bar -->
+    <header class="topbar">
+      <div class="topbar__breadcrumbs">
+        <span class="crumb">Management</span>
+        <span class="crumb-sep">/</span>
+        <span class="crumb branch-badge">main</span>
+        <span class="crumb-sep">/</span>
+        <span class="crumb current-page-title" id="currentPageTitle">Главная</span>
+      </div>
+
+      <div class="topbar__actions">
+        <a href="../index.html" target="_blank" class="btn-ghost" title="Открыть сайт">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+            <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V8a.75.75 0 00-1.5 0v4a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5V4a.5.5 0 01.5-.5h4a.75.75 0 000-1.5H4z"/>
+            <path d="M10.25 1.75a.75.75 0 01.75-.75h3.25c.414 0 .75.336.75.75v3.25a.75.75 0 01-1.5 0V3.06l-4.72 4.72a.75.75 0 01-1.06-1.06l4.72-4.72H11a.75.75 0 01-.75-.75z"/>
+          </svg>
+          Сайт
+        </a>
+
+        <button type="button" class="btn-ghost" id="reloadBtn" title="Сбросить несохранённые изменения">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+            <path fill-rule="evenodd" d="M8 3a5 5 0 104.546 2.914.5.5 0 01.908-.417A6 6 0 118 2v1z"/>
+            <path d="M8 4.466V.534a.25.25 0 01.41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 018 4.466z"/>
+          </svg>
+          Сброс
+        </button>
+
+        <button type="button" class="btn-save" id="saveBtn">
+          <span class="btn-save__spinner" id="saveSpinner"></span>
+          <span class="btn-save__text">Save</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sections Container -->
+    <div class="content-scroll">
+
+      <!-- ================= SECTION: HERO ================= -->
+      <section class="editor-section is-active" id="section-hero">
+        <h1 class="section-heading">Главный экран (Hero)</h1>
+        
+        <!-- Video on the homepage -->
+        <div class="form-group media-upload-group">
+          <label class="form-label">Video on the homepage</label>
+          <p class="form-help">Background video on the home page. Drag and drop your MP4 here or click to select.</p>
+          <div class="drop-zone" id="heroVideoDropZone">
+            <input type="file" id="heroVideoInput" accept="video/mp4,video/*" hidden>
+            <div class="drop-zone__preview" id="heroVideoPreview">
+              <video src="../assets/video/hero.mp4" controls muted playsinline></video>
+            </div>
+            <div class="drop-zone__actions">
+              <button type="button" class="btn-select-file" onclick="document.getElementById('heroVideoInput').click()">Select file</button>
+              <span class="file-name" id="heroVideoName">hero.mp4</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Poster image -->
+        <div class="form-group media-upload-group">
+          <label class="form-label">Background / Poster image</label>
+          <p class="form-help">Full-screen poster fallback before the video loads. Drag or click to load.</p>
+          <div class="drop-zone" id="heroPosterDropZone">
+            <input type="file" id="heroPosterInput" accept="image/*" hidden>
+            <div class="drop-zone__preview" id="heroPosterPreview">
+              <img src="../assets/img/hero-poster.jpg" alt="Poster preview">
+            </div>
+            <div class="drop-zone__actions">
+              <button type="button" class="btn-select-file" onclick="document.getElementById('heroPosterInput').click()">Select file</button>
+              <span class="file-name" id="heroPosterName">hero-poster.jpg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Chip -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Статус работы (плашка) <span class="required">*</span></label>
+            <input type="text" class="form-input" id="hero_status" value="Сегодня открыто до 23:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Индикатор активности</label>
+            <select class="form-select" id="hero_statusOpen">
+              <option value="true" selected>Открыто (зелёная точка)</option>
+              <option value="false">Закрыто (серая точка)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Main Title -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Заголовок (первая часть) <span class="required">*</span></label>
+            <input type="text" class="form-input" id="hero_titlePrefix" value="Больше, ">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Заголовок (акцент / курсив) <span class="required">*</span></label>
+            <input type="text" class="form-input" id="hero_titleEm" value="чем игры">
+          </div>
+        </div>
+
+        <!-- Lead Description -->
+        <div class="form-group">
+          <label class="form-label">Описание под заголовком <span class="required">*</span></label>
+          <textarea class="form-textarea" rows="3" id="hero_lead">PlayStation 5, игровые ПК, VR, 3D-творчество и развивающие занятия — в одном пространстве в центре Бендер. Ребёнок свободно выбирает активности и может переходить между зонами. VR оплачивается отдельно.</textarea>
+        </div>
+
+        <!-- Facts List -->
+        <div class="form-group">
+          <label class="form-label">Цифры и факты (счётчики)</label>
+          <div class="facts-editor" id="factsEditor">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECTION: PRICES ================= -->
+      <section class="editor-section" id="section-prices">
+        <h1 class="section-heading">Цены и тарифы</h1>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Единый тариф (Главное предложение)</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Стоимость <span class="required">*</span></label>
+              <input type="text" class="form-input" id="prices_singleRateAmount" value="80 ₽">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Единица измерения <span class="required">*</span></label>
+              <input type="text" class="form-input" id="prices_singleRateUnit" value="/ час за ребёнка">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Подпись к цене</label>
+            <input type="text" class="form-input" id="prices_singleRateNote" value="Ребёнок сам выбирает активности и свободно переходит между зонами">
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h2 class="card-box__title">VR Meta Quest 3</h2>
+          <div class="form-group">
+            <label class="form-label">Тариф на VR <span class="required">*</span></label>
+            <input type="text" class="form-input" id="prices_vrPrice" value="30 ₽ / 10 минут">
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Отдельные тарифы по оборудованию</h2>
+          <div class="packages-list" id="pricesPackagesList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECTION: ZONES ================= -->
+      <section class="editor-section" id="section-zones">
+        <h1 class="section-heading">Игровые зоны (6 направлений)</h1>
+        <p class="section-subtitle">Редактируйте названия, описания, теги и фотографии для каждой зоны.</p>
+
+        <div class="zones-accordion" id="zonesEditorList">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION: PARTIES ================= -->
+      <section class="editor-section" id="section-parties">
+        <h1 class="section-heading">Праздники и Дни рождения</h1>
+        <p class="section-subtitle">Форматы аренды для компаний и детских дней рождения.</p>
+
+        <div class="parties-list" id="partiesEditorList">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION: NIGHT ================= -->
+      <section class="editor-section" id="section-night">
+        <h1 class="section-heading">Ночные игры</h1>
+
+        <div class="form-group">
+          <label class="form-label">Заголовок секции <span class="required">*</span></label>
+          <input type="text" class="form-input" id="night_title" value="Ночные игры — для подростков и взрослых">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Время проведения <span class="required">*</span></label>
+          <input type="text" class="form-input" id="night_time" value="Каждый день с 23:00 до утра">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Описание ночных игр <span class="required">*</span></label>
+          <textarea class="form-textarea" rows="4" id="night_lead">После закрытия обычного режима Game Hub превращается в закрытый игровой клуб. Мощные ПК, PlayStation 5, VR и комфортная атмосфера для компаний друзей. Только по предварительной брони.</textarea>
+        </div>
+      </section>
+
+      <!-- ================= SECTION: CONTACTS ================= -->
+      <section class="editor-section" id="section-contacts">
+        <h1 class="section-heading">Контакты и Режим работы</h1>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Телефоны администраторов</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Телефон 1 <span class="required">*</span></label>
+              <input type="text" class="form-input" id="contacts_phone1" value="0 778 95 477">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Имя контакта 1</label>
+              <input type="text" class="form-input" id="contacts_phone1Name" value="Татьяна">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Телефон 2</label>
+              <input type="text" class="form-input" id="contacts_phone2" value="0 778 73 236">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Имя контакта 2</label>
+              <input type="text" class="form-input" id="contacts_phone2Name" value="Никита">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Адрес и Локация</h2>
+          <div class="form-group">
+            <label class="form-label">Точный адрес <span class="required">*</span></label>
+            <input type="text" class="form-input" id="contacts_address" value="г. Бендеры, ул. Калинина, 23, 2-й этаж, вход через Café Street Food">
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Режим работы</h2>
+          <div class="form-group">
+            <label class="form-label">Будни (Пн — Пт) <span class="required">*</span></label>
+            <input type="text" class="form-input" id="contacts_hoursWorkdays" value="Пн — Пт: 12:00 — 22:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Выходные (Сб — Вс) <span class="required">*</span></label>
+            <input type="text" class="form-input" id="contacts_hoursWeekends" value="Сб — Вс: 10:00 — 23:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Летний режим</label>
+            <input type="text" class="form-input" id="contacts_hoursSummer" value="Летом: ежедневно 10:00 — 23:00">
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h2 class="card-box__title">Соцсети и Мессенджеры</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Ссылка Instagram</label>
+              <input type="url" class="form-input" id="contacts_instagram" value="https://www.instagram.com/gamehub_bender/">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Никнейм Instagram</label>
+              <input type="text" class="form-input" id="contacts_instagramHandle" value="@gamehub_bender">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ссылка Telegram</label>
+            <input type="url" class="form-input" id="contacts_telegram" value="https://t.me/+37377895477">
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SETTINGS MODAL ===================== -->
+<dialog class="modal" id="settingsModal">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h2 class="modal__title">Настройки подключения к GitHub</h2>
+      <button type="button" class="modal__close" id="closeSettingsModal">&times;</button>
+    </div>
+    <div class="modal__body">
+      <p class="modal__desc">
+        Чтобы сохранять изменения прямо в репозиторий GitHub, укажите ваш репозиторий и Personal Access Token (PAT).
+      </p>
+
+      <div class="form-group">
+        <label class="form-label">Репозиторий (owner/repo)</label>
+        <input type="text" class="form-input" id="ghRepo" value="Josephs28/game-hub-bender-test">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Ветка</label>
+        <input type="text" class="form-input" id="ghBranch" value="main">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">GitHub Personal Access Token</label>
+        <input type="password" class="form-input" id="ghToken" placeholder="ghp_...">
+        <p class="form-help">Токен сохраняется только локально в браузере (localStorage) и используется для создания коммитов.</p>
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn-ghost" id="exportJsonBtn">Скачать content.json</button>
+        <button type="button" class="btn-primary" id="saveSettingsBtn">Сохранить настройки</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- ===================== TOAST NOTIFICATION ===================== -->
+<div class="toast" id="toast"></div>
+
+<script src="editor.js"></script>
+</body>
+</html>
