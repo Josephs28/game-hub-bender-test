@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#18181b">
   <title>Game Hub Editor — Управление контентом</title>
   <link rel="icon" href="../assets/brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,9 +15,11 @@
 </head>
 <body>
 
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
 <div class="app-layout">
   <!-- ===================== SIDEBAR ===================== -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar__top">
       <div class="sidebar__header">
         <div class="sidebar__logo">
@@ -27,6 +32,7 @@
           <span class="brand-title">Game Hub</span>
           <span class="brand-sub">Управление сайтом</span>
         </div>
+        <button type="button" class="sidebar__close-btn" id="sidebarCloseBtn" aria-label="Закрыть меню">&times;</button>
       </div>
 
       <div class="sidebar__management">
@@ -100,12 +106,21 @@
   <main class="main-panel">
     <!-- Top Action Bar -->
     <header class="topbar">
-      <div class="topbar__breadcrumbs">
-        <span class="crumb">Management</span>
-        <span class="crumb-sep">/</span>
-        <span class="crumb branch-badge">main</span>
-        <span class="crumb-sep">/</span>
-        <span class="crumb current-page-title" id="currentPageTitle">Главная</span>
+      <div class="topbar__left">
+        <button type="button" class="btn-menu-toggle" id="menuToggleBtn" aria-label="Открыть меню разделов">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="topbar__breadcrumbs">
+          <span class="crumb crumb--desktop">Management</span>
+          <span class="crumb-sep crumb--desktop">/</span>
+          <span class="crumb branch-badge">main</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb current-page-title" id="currentPageTitle">Главная</span>
+        </div>
       </div>
 
       <div class="topbar__actions">
@@ -114,7 +129,7 @@
             <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V8a.75.75 0 00-1.5 0v4a.5.5 0 01-.5.5H4a.5.5 0 01-.5-.5V4a.5.5 0 01.5-.5h4a.75.75 0 000-1.5H4z"/>
             <path d="M10.25 1.75a.75.75 0 01.75-.75h3.25c.414 0 .75.336.75.75v3.25a.75.75 0 01-1.5 0V3.06l-4.72 4.72a.75.75 0 01-1.06-1.06l4.72-4.72H11a.75.75 0 01-.75-.75z"/>
           </svg>
-          Сайт
+          <span class="btn-ghost__text">Сайт</span>
         </a>
 
         <button type="button" class="btn-ghost" id="reloadBtn" title="Сбросить несохранённые изменения">
@@ -122,7 +137,7 @@
             <path fill-rule="evenodd" d="M8 3a5 5 0 104.546 2.914.5.5 0 01.908-.417A6 6 0 118 2v1z"/>
             <path d="M8 4.466V.534a.25.25 0 01.41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 018 4.466z"/>
           </svg>
-          Сброс
+          <span class="btn-ghost__text">Сброс</span>
         </button>
 
         <button type="button" class="btn-save" id="saveBtn">
@@ -131,6 +146,16 @@
         </button>
       </div>
     </header>
+
+    <!-- Mobile Horizontal Tabs Strip -->
+    <nav class="mobile-tabs" id="mobileTabs" aria-label="Быстрый выбор раздела">
+      <button type="button" class="mobile-tab is-active" data-section="hero">🏠 Главная</button>
+      <button type="button" class="mobile-tab" data-section="prices">💰 Цены</button>
+      <button type="button" class="mobile-tab" data-section="zones">🎮 Зоны</button>
+      <button type="button" class="mobile-tab" data-section="parties">🎂 Праздники</button>
+      <button type="button" class="mobile-tab" data-section="night">🌙 Ночные</button>
+      <button type="button" class="mobile-tab" data-section="contacts">📞 Контакты</button>
+    </nav>
 
     <!-- Sections Container -->
     <div class="content-scroll">

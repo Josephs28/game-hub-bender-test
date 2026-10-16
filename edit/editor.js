@@ -63,20 +63,66 @@
   }
 
   /* --------------------------------------------------------------------------
-     Navigation Switcher
+     Navigation Switcher & Mobile Drawer
      -------------------------------------------------------------------------- */
   function setupNavigation() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const menuToggleBtn = document.getElementById('menuToggleBtn');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    const mobileTabs = document.querySelectorAll('.mobile-tab');
+
+    function closeSidebar() {
+      if (sidebar) sidebar.classList.remove('is-open');
+      if (backdrop) backdrop.classList.remove('is-open');
+    }
+
+    function openSidebar() {
+      if (sidebar) sidebar.classList.add('is-open');
+      if (backdrop) backdrop.classList.add('is-open');
+    }
+
+    if (menuToggleBtn) menuToggleBtn.addEventListener('click', openSidebar);
+    if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+    function switchSection(sectionName) {
+      // Update sidebar nav items
+      navItems.forEach(n => {
+        n.classList.toggle('is-active', n.dataset.section === sectionName);
+      });
+
+      // Update mobile tabs
+      mobileTabs.forEach(t => {
+        t.classList.toggle('is-active', t.dataset.section === sectionName);
+      });
+
+      // Update visible section
+      sections.forEach(s => {
+        s.classList.toggle('is-active', s.id === 'section-' + sectionName);
+      });
+
+      // Update page title
+      const activeBtn = document.querySelector(`.nav-item[data-section="${sectionName}"]`);
+      if (activeBtn) {
+        currentPageTitle.textContent = activeBtn.querySelector('span:last-child').textContent;
+      }
+
+      // Close mobile drawer if open
+      closeSidebar();
+    }
+
+    // Sidebar items
     navItems.forEach(item => {
       item.addEventListener('click', () => {
-        navItems.forEach(n => n.classList.remove('is-active'));
-        sections.forEach(s => s.classList.remove('is-active'));
+        switchSection(item.dataset.section);
+      });
+    });
 
-        item.classList.add('is-active');
-        const sectionId = 'section-' + item.dataset.section;
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) targetSection.classList.add('is-active');
-
-        currentPageTitle.textContent = item.querySelector('span:last-child').textContent;
+    // Mobile tabs
+    mobileTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        switchSection(tab.dataset.section);
       });
     });
 
@@ -478,6 +524,23 @@
      Settings Modal & Local Storage
      -------------------------------------------------------------------------- */
   function loadSettings() {
+    // 1. Auto-detect token from URL parameter or hash (e.g. edit/#token=ghp_... or ?token=...)
+    try {
+      const hashClean = window.location.hash.replace(/^#\/?/, '');
+      const hashParams = new URLSearchParams(hashClean);
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlToken = hashParams.get('token') || searchParams.get('token');
+
+      if (urlToken) {
+        localStorage.setItem('gamehub_gh_token', urlToken.trim());
+        // Clean URL to keep token out of address bar / browser history
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+        showToast('✓ Токен доступа успешно подключен!', 'success');
+      }
+    } catch (_) {}
+
     const token = localStorage.getItem('gamehub_gh_token');
     const repo = localStorage.getItem('gamehub_gh_repo') || DEFAULT_REPO;
     const branch = localStorage.getItem('gamehub_gh_branch') || DEFAULT_BRANCH;

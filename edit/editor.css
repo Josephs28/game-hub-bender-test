@@ -75,8 +75,42 @@ body {
 .sidebar__header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   margin-bottom: 24px;
+}
+
+.sidebar__close-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.sidebar__close-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Sidebar Backdrop on Mobile */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.is-open {
+  display: block;
+  opacity: 1;
 }
 
 .sidebar__logo {
@@ -291,11 +325,73 @@ body {
   padding: 0 28px;
 }
 
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .topbar__breadcrumbs {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
+}
+
+/* Horizontal Mobile Tabs */
+.mobile-tabs {
+  display: none;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 8px 12px;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.mobile-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-tab {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+.mobile-tab.is-active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
 }
 
 .crumb {
@@ -700,3 +796,166 @@ body {
 .toast--error {
   border-color: #ef4444;
 }
+
+/* ==========================================================================
+   MOBILE & IPHONE RESPONSIVE STYLES (Smartphones, iOS Safari, Android)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow and handle mobile dynamic viewport */
+  body, .app-layout {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Off-canvas mobile sidebar drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar__close-btn {
+    display: block;
+  }
+
+  /* Show mobile header buttons and tabs */
+  .btn-menu-toggle {
+    display: inline-flex;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .mobile-tabs {
+    display: flex;
+  }
+
+  /* Compact Topbar */
+  .topbar {
+    padding: 0 12px;
+    height: 52px;
+    min-height: 52px;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .crumb--desktop {
+    display: none;
+  }
+
+  .btn-ghost {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .btn-ghost__text {
+    display: none; /* Hide text on ultra small screens to save space */
+  }
+
+  .btn-save {
+    padding: 8px 16px;
+    font-size: 13px;
+    min-height: 36px;
+  }
+
+  /* Comfortable Mobile Scroll Padding */
+  .content-scroll {
+    padding: 16px 12px max(80px, calc(40px + env(safe-area-inset-bottom)));
+  }
+
+  .section-heading {
+    font-size: 20px;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+
+  /* Stack Form Rows on Mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* 
+     CRITICAL FOR IPHONE / IOS SAFARI:
+     Inputs must have at least 16px font-size to prevent automatic browser zoom
+  */
+  .form-input, .form-textarea, .form-select {
+    font-size: 16px !important;
+    padding: 11px 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Stack Drop Zones for Thumb Friendly Uploading */
+  .drop-zone {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .drop-zone__preview {
+    max-width: 100%;
+    max-height: 180px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .drop-zone__preview img, .drop-zone__preview video {
+    max-height: 160px;
+    width: 100%;
+  }
+
+  .drop-zone__actions {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .btn-select-file {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Card Containers */
+  .card-box, .zone-card, .party-card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+  }
+
+  /* Modal on Mobile */
+  .modal__card {
+    width: 95%;
+    max-height: 90vh;
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+
+  /* Mobile Toast Alert */
+  .toast {
+    left: 12px;
+    right: 12px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    justify-content: center;
+    text-align: center;
+    padding: 12px 16px;
+  }
+}
+
